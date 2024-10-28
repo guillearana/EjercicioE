@@ -23,7 +23,7 @@ public class GestionPersonas extends Application {
     public void start(Stage primaryStage) {
         try {
             // Carga el archivo FXML y lo establece en el panel raíz
-            GridPane root = (GridPane) FXMLLoader.load(getClass().getResource("/es/guillearana/ejerciciod/ejercicioD.fxml"));
+            GridPane root = (GridPane) FXMLLoader.load(getClass().getResource("/es/guillearana/ejercicioe/ejercicioE.fxml"));
             // Crea una escena con el panel raíz
             Scene scene = new Scene(root);
             // Asigna la escena al escenario principal
