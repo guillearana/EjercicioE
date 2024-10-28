@@ -20,8 +20,8 @@ import javafx.stage.Stage;
 
 /**
  * Controlador para la gestión de personas.
- * Este controlador se encarga de la lógica de negocio para la interfaz de usuario
- * relacionada con la creación y gestión de objetos {@link Persona}.
+ * Este controlador maneja la lógica de negocio y la interacción con la interfaz de usuario
+ * para la creación y gestión de objetos {@link Persona}.
  */
 public class EjercicioEcontroller {
 
@@ -236,7 +236,7 @@ public class EjercicioEcontroller {
             persona.setNombre(tfNombre.getText());
             persona.setApellidos(tfApellidos.getText());
             persona.setEdad(Integer.parseInt(tfEdad.getText()));
-            tableInfo.refresh();
+            tableInfo.refresh(); // Actualiza la tabla
             alertaInformacion("Persona modificada correctamente.");
         } else {
             alertaError(errores);
@@ -244,83 +244,65 @@ public class EjercicioEcontroller {
     }
 
     /**
-     * Valida los campos de entrada para asegurarse de que no están vacíos y que la edad es numérica.
+     * Agrega una persona a la lista y actualiza la tabla.
      *
-     * @return un String con los mensajes de error encontrados; vacío si no hay errores
+     * @param persona la persona a añadir
      */
-    private String validarCampos() {
-        String errores = "";
-
-        // Valida el campo Nombre
-        String nombre = tfNombre.getText();
-        if (nombre.isEmpty()) {
-            errores += "Tienes que rellenar el campo Nombre\n";
-        }
-        // Valida el campo Apellidos
-        String apellidos = tfApellidos.getText();
-        if (apellidos.isEmpty()) {
-            errores += "Tienes que rellenar el campo Apellidos\n";
-        }
-        // Valida el campo Edad
-        int edad = 0;
-        try {
-            edad = Integer.parseInt(tfEdad.getText());
-        } catch (NumberFormatException e) {
-            errores += "La edad tiene que ser numérica\n";
-        }
-
-        return errores;
+    private void aniadirPersona(Persona persona) {
+        personas.add(persona);
+        tableInfo.setItems(personas);
     }
 
     /**
-     * Muestra una alerta de error con el mensaje proporcionado.
+     * Valida los campos de entrada y devuelve un mensaje de error si hay campos inválidos.
+     *
+     * @return un mensaje de error si hay errores, de lo contrario, una cadena vacía
+     */
+    private String validarCampos() {
+        StringBuilder errores = new StringBuilder();
+
+        if (tfNombre.getText().isEmpty()) {
+            errores.append("El campo Nombre no puede estar vacío.\n");
+        }
+        if (tfApellidos.getText().isEmpty()) {
+            errores.append("El campo Apellidos no puede estar vacío.\n");
+        }
+        if (tfEdad.getText().isEmpty()) {
+            errores.append("El campo Edad no puede estar vacío.\n");
+        } else {
+            try {
+                Integer.parseInt(tfEdad.getText());
+            } catch (NumberFormatException e) {
+                errores.append("El campo Edad debe ser un número.\n");
+            }
+        }
+
+        return errores.toString();
+    }
+
+    /**
+     * Muestra un mensaje de alerta de error.
      *
      * @param mensaje el mensaje a mostrar en la alerta
      */
     private void alertaError(String mensaje) {
-        Alert ventanaEmergente = new Alert(AlertType.ERROR);
-        ventanaEmergente.setTitle("Error");
-        ventanaEmergente.setHeaderText(null);  // Sin encabezado.
-        ventanaEmergente.setContentText(mensaje);
-        ventanaEmergente.show();
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     /**
-     * Muestra una alerta de información con el mensaje proporcionado.
+     * Muestra un mensaje de alerta de información.
      *
      * @param mensaje el mensaje a mostrar en la alerta
      */
     private void alertaInformacion(String mensaje) {
-        Alert ventanaEmergente = new Alert(AlertType.INFORMATION);
-        ventanaEmergente.setTitle("Información");
-        ventanaEmergente.setHeaderText(null);  // Sin encabezado.
-        ventanaEmergente.setContentText(mensaje);
-        ventanaEmergente.show();
-    }
-
-    /**
-     * Añade una nueva persona a la lista y actualiza la tabla si la persona no existe ya.
-     *
-     * @param p la persona a añadir
-     */
-    private void aniadirPersona(Persona p) {
-        // Comprueba si la persona ya existe en la lista
-        if (!personas.contains(p)) {
-            personas.add(p);
-            tableInfo.setItems(personas);
-            tableInfo.refresh();
-            vaciarCampos();  // Vacía los campos después de añadir
-        } else {
-            alertaError("Esa persona ya existe");
-        }
-    }
-
-    /**
-     * Vacía los campos de entrada.
-     */
-    private void vaciarCampos() {
-        tfNombre.setText("");
-        tfApellidos.setText("");
-        tfEdad.setText("");
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
